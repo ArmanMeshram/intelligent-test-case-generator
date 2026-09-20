@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Test Case Generation Agent — Project Documentation</title>
+    <style>
+        /* ===== CSS RESET & BASE ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 50px 60px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4 {
+            color: #111;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 40px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 24px;
+            color: #444;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #555;
+        }
+
+        strong {
+            color: #222;
+        }
+
+        /* ===== LISTS ===== */
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            color: #555;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+        td:first-child {
+            font-weight: 600;
+            color: #0056b3;
+            width: 25%;
+        }
+
+        /* ===== CODE BLOCKS ===== */
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #d14;
+        }
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #333;
+        }
+
+        /* ===== ARCHITECTURE FLOW ===== */
+        .architecture-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .flow-box {
+            background: #fff;
+            border: 1px solid #ced4da;
+            padding: 12px 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #495057;
+            min-width: 130px;
+        }
+        .flow-arrow {
+            color: #adb5bd;
+            font-weight: bold;
+        }
+
+        /* ===== ALERTS/CALLOUTS ===== */
+        .callout {
+            background-color: #e7f1ff;
+            border-left: 4px solid #0056b3;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .callout p {
+            margin: 0;
+            color: #004085;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            .architecture-flow { flex-direction: column; align-items: stretch; }
+            .flow-arrow { text-align: center; transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Project Documentation: Intelligent Test Case Generation Agent</h1>
+    <p><strong>Project Type:</strong> CA-3 Mini Project</p>
+    <p><strong>Description:</strong> An automated tool that generates comprehensive test cases from source code or feature descriptions using Google Gemini and Gradio.</p>
+    <hr style="border:0; border-top:1px solid #eee; margin: 30px 0;">
+
+    <!-- ===== 1. OVERVIEW ===== -->
+    <section id="overview">
+        <h2>1. Project Overview</h2>
+        
+        <h3>Problem Statement</h3>
+        <p>Writing test cases manually is a time-consuming, repetitive, and error-prone process. Developers frequently skip writing adequate tests, leading to software defects in production environments.</p>
+
+        <h3>Proposed Solution</h3>
+        <p>This project implements an intelligent agent powered by the <strong>Google Gemini Large Language Model (LLM)</strong>. It analyzes either source code or textual feature descriptions and automatically generates:</p>
+        <ul>
+            <li><strong>Executable unit test code</strong> targeted at specific frameworks (when code is provided).</li>
+            <li><strong>Structured manual test case tables</strong> outlining steps and expected results (when a feature description is provided).</li>
+        </ul>
+    </section>
+
+    <!-- ===== 2. ARCHITECTURE ===== -->
+    <section id="architecture">
+        <h2>2. System Architecture</h2>
+        <p>The application follows a linear client-server architecture utilizing a web-based frontend and a cloud-based LLM backend.</p>
+
+        <div class="architecture-flow">
+            <div class="flow-box">User Input<br><span style="font-size: 0.75rem; font-weight: normal;">(Code / Description)</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">Gradio GUI<br><span style="font-size: 0.75rem; font-weight: normal;">(Frontend)</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">Python Backend<br><span style="font-size: 0.75rem; font-weight: normal;">(Prompt Construction)</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">Gemini API<br><span style="font-size: 0.75rem; font-weight: normal;">(LLM Inference)</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">Test Cases<br><span style="font-size: 0.75rem; font-weight: normal;">(Output Display)</span></div>
+        </div>
+
+        <div class="callout">
+            <p><strong>Data Flow:</strong> User data is collected via the Gradio interface, injected into a predefined prompt template in the Python backend, transmitted to the Gemini REST API for inference, and the resulting Markdown text is rendered back in the GUI.</p>
+        </div>
+    </section>
+
+    <!-- ===== 3. TECH STACK ===== -->
+    <section id="tech-stack">
+        <h2>3. Technology Stack</h2>
+        <ul>
+            <li><strong>Python 3:</strong> The core programming language used to build the application logic.</li>
+            <li><strong>Gradio:</strong> An open-source Python library used to rapidly construct the interactive web-based graphical user interface (GUI).</li>
+            <li><strong>Google Gemini API:</strong> The cloud-based Large Language Model service used for natural language understanding and code generation.</li>
+            <li><strong>google-genai SDK:</strong> The official Python client library utilized to authenticate and communicate with the Gemini API.</li>
+        </ul>
+    </section>
+
+    <!-- ===== 4. TERMINOLOGIES ===== -->
+    <section id="terminologies">
+        <h2>4. Key Terminologies &amp; Definitions</h2>
+
+        <h3>Artificial Intelligence &amp; Cloud Terminology</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Large Language Model (LLM)</td>
+                    <td>A deep learning algorithm trained on massive datasets capable of understanding, summarizing, and generating human language and programming code.</td>
+                </tr>
+                <tr>
+                    <td>API (Application Programming Interface)</td>
+                    <td>A set of protocols that allows different software applications to communicate. We use the Gemini API to send data to Google's servers.</td>
+                </tr>
+                <tr>
+                    <td>Prompt Engineering</td>
+                    <td>The practice of designing and structuring text inputs (prompts) to effectively guide an LLM to produce a desired, high-quality output.</td>
+                </tr>
+                <tr>
+                    <td>System Instruction</td>
+                    <td>A directive provided to the LLM that establishes its persona and operational constraints (e.g., instructing the model to act as an "expert testing engineer").</td>
+                </tr>
+                <tr>
+                    <td>Inference</td>
+                    <td>The computational process where the trained AI model analyzes the prompt and generates its response.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Software Testing Terminology</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Test Case</td>
+                    <td>A specific set of conditions or variables under which a tester determines whether a system satisfies requirements or functions correctly.</td>
+                </tr>
+                <tr>
+                    <td>Unit Test</td>
+                    <td>A software testing method where individual units or components of a software (such as a function) are tested in isolation.</td>
+                </tr>
+                <tr>
+                    <td>Positive Testing</td>
+                    <td>Testing conducted using valid input data to verify that the application behaves as expected under normal conditions.</td>
+                </tr>
+                <tr>
+                    <td>Negative Testing</td>
+                    <td>Testing conducted using invalid or unexpected input data to ensure the application handles errors gracefully without crashing.</td>
+                </tr>
+                <tr>
+                    <td>Boundary Value Analysis</td>
+                    <td>A testing technique focusing on the extreme edges of input ranges, where defects are most likely to occur.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ===== 5. CODE WALKTHROUGH ===== -->
+    <section id="code-walkthrough">
+        <h2>5. Code Walkthrough</h2>
+        <p>The application is contained entirely within <code>app.py</code>. Below is an explanation of the core components.</p>
+
+        <h3>1. API Configuration</h3>
+<pre><code>import gradio as gr
+from google import genai
+
+GEMINI_API_KEY = "your-api-key-here"
+client = genai.Client(api_key=GEMINI_API_KEY)</code></pre>
+        <p>The <code>google-genai</code> SDK is imported and initialized using the API key to authenticate requests.</p>
+
+        <h3>2. Prompt Templates</h3>
+<pre><code>CODE_USER_PROMPT = """Analyze the following {language} code and generate comprehensive test cases using the **{framework}** testing framework.
+
+```{language}
+{code}
+```"""</code></pre>
+        <p>String formatting is used to dynamically inject user selections (language, framework, and code) into the prompt before transmission.</p>
+
+        <h3>3. Generation Function</h3>
+<pre><code>def generate_test_cases(input_type, code_or_description, language, framework, model):
+    # Construct prompt...
+    response = client.models.generate_content(
+        model=model,
+        contents=user_prompt,
+        config=genai.types.GenerateContentConfig(
+            system_instruction=SYSTEM_PROMPT,
+            temperature=0.4,
+            max_output_tokens=4096,
+        ),
+    )
+    return response.text</code></pre>
+        <p>This function acts as the callback for the GUI button. It builds the prompt, executes the API call with specific configurations (a low temperature of 0.4 for deterministic output), and returns the generated text.</p>
+    </section>
+
+    <!-- ===== 6. PROJECT STRUCTURE & SETUP ===== -->
+    <section id="setup">
+        <h2>6. Project Structure &amp; Setup</h2>
+        
+        <h3>File Structure</h3>
+        <ul>
+            <li><code>app.py</code>: The main application script containing logic and GUI definitions.</li>
+            <li><code>requirements.txt</code>: Lists the Python package dependencies (<code>gradio</code>, <code>google-genai</code>).</li>
+            <li><code>README.md</code>: Standard repository documentation.</li>
+        </ul>
+
+        <h3>Execution Instructions</h3>
+        <p>To run the application locally, execute the following commands in the terminal:</p>
+<pre><code># 1. Install required packages
+pip install -r requirements.txt
+
+# 2. Run the application
+python app.py
+
+# 3. Access the web interface
+# Open http://127.0.0.1:7860 in a web browser</code></pre>
+    </section>
+
+</div>
+
+</body>
+</html>
