@@ -44,7 +44,7 @@ RULES:
 """
 
 CODE_PROMPT = """Generate test cases for this {language} code.
-Return ONLY the raw JSON array.
+Return ONLY the raw JSON array. Also generate test case code in {language} for each test case.
 
 {code}"""
 
