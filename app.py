@@ -28,7 +28,7 @@ LANGUAGES = [
 # ---------------------------------------------------------------------------
 # Prompt — pure I/O test cases, zero code
 # ---------------------------------------------------------------------------
-SYSTEM_PROMPT = """You are a test-case generator.
+SYSTEM_PROMPT = """You are a test-case generator that produces xUnit-style unit tests following the Arrange-Act-Assert (AAA) pattern.
 
 RULES:
 1. Return ONLY a valid raw JSON array. No markdown fences, no commentary.
@@ -39,12 +39,23 @@ RULES:
    "input"           -> function parameters or stdin values
    "expected_output" -> exact return value or stdout
    "explanation"     -> one sentence on what this tests
+   "test_code"       -> complete xUnit test method in the requested language,
+                        using the Arrange-Act-Assert pattern with explicit
+                        // Arrange, // Act, // Assert comments.
+                        For C# use xUnit [Fact]; for Java use JUnit @Test;
+                        for Python use pytest; for JavaScript/TypeScript use Jest;
+                        for other languages use the closest xUnit-family framework.
 3. Generate 6-8 diverse test cases.
-4. Do NOT output any executable code.
+4. The test_code MUST follow this structure:
+   // Arrange  — set up inputs and expected values
+   // Act      — call the function / method under test
+   // Assert   — verify the result matches expected output
 """
 
-CODE_PROMPT = """Generate test cases for this {language} code.
-Return ONLY the raw JSON array. Also generate test case code in {language} for each test case.
+CODE_PROMPT = """Generate xUnit-style unit test cases (Arrange-Act-Assert) for this {language} code.
+Return ONLY the raw JSON array. Each object must include a "test_code" field
+containing a complete test method using the appropriate xUnit framework for {language},
+with // Arrange, // Act, // Assert comments.
 
 {code}"""
 
@@ -116,6 +127,7 @@ def build_html(cases):
         inp   = esc(str(tc.get("input", "")))
         out   = esc(str(tc.get("expected_output", "")))
         expl  = esc(str(tc.get("explanation", "")))
+        code  = esc(str(tc.get("test_code", "")))
 
         col, bg, bdr = CAT.get(cat, CAT["Basic"])
         active   = " active" if idx == 0 else ""
@@ -138,6 +150,18 @@ def build_html(cases):
             </div>
         </div>"""
 
+        # Build the test code section (collapsible)
+        code_section = ""
+        if code:
+            code_section = f"""
+            <div class="code-section">
+                <div class="code-header" onclick="var b=this.nextElementSibling;var a=this.querySelector('.chevron');if(b.style.display==='none'){{b.style.display='block';a.textContent='▾';}}else{{b.style.display='none';a.textContent='▸';}}">
+                    <span class="code-title">🧪 Unit Test Code (xUnit · Arrange-Act-Assert)</span>
+                    <span class="chevron">▾</span>
+                </div>
+                <pre class="code-body">{code}</pre>
+            </div>"""
+
         panels += f"""
         <div id="pn{idx}" class="pn" style="display:{display};">
             <div class="pt">{title}</div>
@@ -154,6 +178,8 @@ def build_html(cases):
             </div>
 
             {"<div class='expl'>" + expl + "</div>" if expl else ""}
+
+            {code_section}
         </div>"""
 
     return f"""
@@ -441,6 +467,53 @@ input:focus, select:focus, textarea:focus {
     margin-top: 4px;
 }
 
+/* ---- test code section ---- */
+.code-section {
+    margin-top: 14px;
+    border: 1px solid rgba(104,186,127,.25);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #1a2e22;
+}
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #1e3326;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(104,186,127,.15);
+    user-select: none;
+    transition: background .15s ease;
+}
+.code-header:hover {
+    background: rgba(46,111,64,.3);
+}
+.code-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #68BA7F;
+}
+.chevron {
+    font-size: 14px;
+    color: #68BA7F;
+    transition: transform .15s ease;
+}
+.code-body {
+    margin: 0;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #CFFFDC;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background: #141f18;
+    border-top: 1px solid rgba(104,186,127,.1);
+}
+
 /* error */
 .err {
     padding: 18px; border-radius: 10px;
@@ -504,9 +577,9 @@ with gr.Blocks(title="Intelligent Test Case Generator") as demo:
     </div>
     """)
 
-if __name__ == "__main__":
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=int(os.environ.get("PORT", 7860)),
-        css=CSS,
-    )
+ if __name__ == "__main__":
+       demo.launch(
+           server_name="0.0.0.0",
+           server_port=int(os.environ.get("PORT", 7860)),
+           css=CSS,
+       )
